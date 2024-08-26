@@ -13,9 +13,17 @@ function addToList() {
     textarea,
     timestamp: formattedTime,
   };
-
-  userArray.push(toDoObject);
-  displayToDo();
+        
+  if(title === "" && textarea === ""){
+    document.getElementById("display").innerHTML = `<h1 style="color:red;" class="text-center">Error : Please enter a title or description</h1>`
+    console.log("not here")
+  }
+   else {
+    userArray.push(toDoObject);
+    displayToDo();
+    console.log("here")
+  }
+  
 
   document.getElementById("title").value = "";
   document.getElementById("textarea").value = "";
@@ -83,20 +91,20 @@ function editItem(index){
   let addSelector = document.querySelector('button[onclick = "addToList()"]')
 
   addSelector.innerText = "Save"
-  addSelector.setAttribute("onclick , saveItem()")
+  addSelector.setAttribute("onclick" , "saveItem()")
 }
 
 function saveItem(){
-  let newTitle = document.getElementById("title").value
-  let newText = document.getElementById("textarea").value
+  let newTitle = document.getElementById("title").value;
+  let newText = document.getElementById("textarea").value;
 
-  userArray[editIndex].title = newTitle
-  userArray[editIndex].textarea = newText
+  userArray[editIndex].title = newTitle;
+  userArray[editIndex].textarea = newText;
 
   let addSelector = document.querySelector('button[onclick = "saveItem()"]')
 
-  addSelector.innerText = "Add"
-  addSelector.setAttribute("onclick , addToList()")  
+  addSelector.innerText = "Add";
+  addSelector.setAttribute("onclick" , "addToList()")  ;
 
   displayToDo()
   editIndex = -1
