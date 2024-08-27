@@ -46,10 +46,10 @@ function displayToDo() {
     <thead>
       <tr class="text-center">
         <th class="col-1">S/N</th>
-        <th class="col-4">Title</th>
+        <th class="col-3">Title</th>
         <th class="col-2">Description</th>
         <th class="col-2">Time Added</th>
-        <th class="col-2">Actions</th>
+        <th class="col-3">Actions</th>
       </tr>
     </thead>
   `;
@@ -62,7 +62,7 @@ function displayToDo() {
         <td><button type="button" class="btn btn-success col-7 m--1" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="showModal(${i})">View</button></td>
         <td>${userArray[i].timestamp}</td>
         <td>
-          <button class="btn btn-primary col-5" onclick="editItem(${i})">Edit</button>
+          <button class="btn btn-primary col-5 fs-7 fs-md-4" onclick="editItem(${i})">Edit</button>
           <button class="btn btn-danger col-5" onclick="deleteItem(${i})">Delete</button>
         </td>
       </tr>
@@ -95,11 +95,15 @@ function editItem(index){
 }
 
 function saveItem(){
+  let currentTime = new Date();
+  let formattedTime = formatDateTime(currentTime);
+
   let newTitle = document.getElementById("title").value;
   let newText = document.getElementById("textarea").value;
 
   userArray[editIndex].title = newTitle;
   userArray[editIndex].textarea = newText;
+  userArray[editIndex].timestamp = formattedTime;
 
   let addSelector = document.querySelector('button[onclick = "saveItem()"]')
 
