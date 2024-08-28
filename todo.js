@@ -1,5 +1,10 @@
-let userArray = [];
-let editIndex = -1; 
+
+let taskFromLocal = localStorage.getItem("myTasks");
+let objFromLocal = JSON.parse(taskFromLocal);
+
+
+let userArray = objFromLocal;
+let editIndex = -1;
 
 function addToList() {
   let title = document.getElementById("title").value;
@@ -12,18 +17,19 @@ function addToList() {
     title,
     textarea,
     timestamp: formattedTime,
+    completed: false // Track completion status
   };
-        
-  if(title === "" && textarea === ""){
-    document.getElementById("display").innerHTML = `<h1 style="color:red;" class="text-center">Error : Please enter a title or description</h1>`
-    console.log("not here")
-  }
-   else {
+  let str = JSON.stringify(userArray)
+  localStorage.setItem("myTasks" , str);
+
+  if (title === "" && textarea === "") {
+    document.getElementById("display").innerHTML = `<h1 style="color:red;" class="text-center">Error: Please enter a title or description</h1>`;
+  } else {
     userArray.push(toDoObject);
     displayToDo();
-    console.log("here")
   }
-  
+
+    //  displayToDo()
 
   document.getElementById("title").value = "";
   document.getElementById("textarea").value = "";
@@ -42,10 +48,12 @@ function formatDateTime(date) {
 }
 
 function displayToDo() {
+  let sortedArray = userArray.sort((a, b) => a.completed - b.completed); // Sort by completed status
+
   let display = `
     <thead>
       <tr class="text-center">
-        <th class="col-1">S/N</th>
+        <th class="col-1"></th>
         <th class="col-3">Title</th>
         <th class="col-2">Description</th>
         <th class="col-2">Time Added</th>
@@ -54,13 +62,14 @@ function displayToDo() {
     </thead>
   `;
 
-  for (let i = 0; i < userArray.length; i++) {
+  for (let i = 0; i < sortedArray.length; i++) {
+    const checked = sortedArray[i].completed ? 'checked' : '';
     display += `
-      <tr class="text-center tablerow">
-        <td>${i + 1}</td>
-        <td>${userArray[i].title}</td>
+      <tr class="text-center tablerow ${sortedArray[i].completed ? 'completed' : ''}">
+        <td><input class="form-check-input" type="checkbox" ${checked} onclick="toggleCompletion(${i})"></td>
+        <td>${sortedArray[i].title}</td>
         <td><button type="button" class="btn btn-success col-7 m--1" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="showModal(${i})">View</button></td>
-        <td>${userArray[i].timestamp}</td>
+        <td>${sortedArray[i].timestamp}</td>
         <td>
           <button class="btn btn-primary col-5 fs-7 fs-md-4" onclick="editItem(${i})">Edit</button>
           <button class="btn btn-danger col-5" onclick="deleteItem(${i})">Delete</button>
@@ -70,6 +79,11 @@ function displayToDo() {
   }
 
   document.getElementById("display").innerHTML = display;
+}
+
+function toggleCompletion(index) {
+  userArray[index].completed = !userArray[index].completed;
+  displayToDo();
 }
 
 function showModal(index) {
@@ -82,19 +96,19 @@ function deleteItem(index) {
   displayToDo();
 }
 
-function editItem(index){
+function editItem(index) {
   editIndex = index;
 
-  document.getElementById("textarea").value = userArray[index].textarea
-  document.getElementById("title").value = userArray[index].title
+  document.getElementById("textarea").value = userArray[index].textarea;
+  document.getElementById("title").value = userArray[index].title;
 
-  let addSelector = document.querySelector('button[onclick = "addToList()"]')
+  let addSelector = document.querySelector('button[onclick="addToList()"]');
 
-  addSelector.innerText = "Save"
-  addSelector.setAttribute("onclick" , "saveItem()")
+  addSelector.innerText = "Save";
+  addSelector.setAttribute("onclick", "saveItem()");
 }
 
-function saveItem(){
+function saveItem() {
   let currentTime = new Date();
   let formattedTime = formatDateTime(currentTime);
 
@@ -105,11 +119,11 @@ function saveItem(){
   userArray[editIndex].textarea = newText;
   userArray[editIndex].timestamp = formattedTime;
 
-  let addSelector = document.querySelector('button[onclick = "saveItem()"]')
+  let addSelector = document.querySelector('button[onclick="saveItem()"]');
 
   addSelector.innerText = "Add";
-  addSelector.setAttribute("onclick" , "addToList()")  ;
+  addSelector.setAttribute("onclick", "addToList()");
 
-  displayToDo()
-  editIndex = -1
+  displayToDo();
+  editIndex = -1;
 }
