@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Document</title>
     <style>
       /* Media query for small screens (e.g., less than 576px) */
@@ -35,12 +36,15 @@
   text-decoration: line-through;
   color: gray;
 }
+.completed i {
+  display: none;
+}
     </style>
 </head>
 
-<body>
+<body onload="displayToDo()">
 
-  <div class="form col-11 col-md-9 mx-auto border rounded-2 my-3 p-4 inputBody">
+  <div class="form col-11 col-md-9 mx-auto border rounded-2 my-3 p-4 inputBody shadow">
       <div class="mx-auto">
           <h1 class="text-success fw-bold text-center pt-3 pb-3">To DO APP</h1>
       </div>
@@ -58,7 +62,7 @@
      
     </div>
     <div class="col-11 mx-auto mt-5">
-        <table class="table table-bordered col-10 tablo rounded-2">
+        <table class="table table-bordered col-10 tablo rounded-2 shadow">
            
 
             <tbody  id="display" >

@@ -1,9 +1,9 @@
 
-let taskFromLocal = localStorage.getItem("myTasks");
-let objFromLocal = JSON.parse(taskFromLocal);
+let localTasks = localStorage.getItem("tasks");
+let objectFromLocal = JSON.parse(localTasks);
+ console.log(objectFromLocal)
 
-
-let userArray = objFromLocal;
+let userArray = objectFromLocal;
 let editIndex = -1;
 
 function addToList() {
@@ -17,23 +17,23 @@ function addToList() {
     title,
     textarea,
     timestamp: formattedTime,
-    completed: false // Track completion status
+    completed: false
   };
-  let str = JSON.stringify(userArray)
-  localStorage.setItem("myTasks" , str);
+   if(title.trim() === "" || textarea.trim() === ""){
+    alert("Please enter a title or description ")
+    return;
+   }
 
-  if (title === "" && textarea === "") {
-    document.getElementById("display").innerHTML = `<h1 style="color:red;" class="text-center">Error: Please enter a title or description</h1>`;
-  } else {
-    userArray.push(toDoObject);
-    displayToDo();
-  }
-
-    //  displayToDo()
 
   document.getElementById("title").value = "";
   document.getElementById("textarea").value = "";
-}
+      userArray.push(toDoObject);
+      console.log(userArray)
+    localStorage.setItem("tasks", JSON.stringify(userArray));
+    displayToDo();
+    }
+
+
 
 function formatDateTime(date) {
   let year = date.getFullYear();
@@ -48,8 +48,6 @@ function formatDateTime(date) {
 }
 
 function displayToDo() {
-  let sortedArray = userArray.sort((a, b) => a.completed - b.completed); // Sort by completed status
-
   let display = `
     <thead>
       <tr class="text-center">
@@ -62,17 +60,17 @@ function displayToDo() {
     </thead>
   `;
 
-  for (let i = 0; i < sortedArray.length; i++) {
-    const checked = sortedArray[i].completed ? 'checked' : '';
+  for (let i = 0; i < userArray.length; i++) {
+    const checked = userArray[i].completed ? 'checked' : '';
     display += `
-      <tr class="text-center tablerow ${sortedArray[i].completed ? 'completed' : ''}">
+      <tr class="text-center tablerow ${userArray[i].completed ? 'completed' : ''}">
         <td><input class="form-check-input" type="checkbox" ${checked} onclick="toggleCompletion(${i})"></td>
-        <td>${sortedArray[i].title}</td>
-        <td><button type="button" class="btn btn-success col-7 m--1" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="showModal(${i})">View</button></td>
-        <td>${sortedArray[i].timestamp}</td>
+        <td>${userArray[i].title}</td>
+        <td><i class="fa-solid fa-eye fs-6 text-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="showModal(${i})"></i></td>
+        <td>${userArray[i].timestamp}</td>
         <td>
-          <button class="btn btn-primary col-5 fs-7 fs-md-4" onclick="editItem(${i})">Edit</button>
-          <button class="btn btn-danger col-5" onclick="deleteItem(${i})">Delete</button>
+          <i class="fa-solid fa-file-pen fs-6 me-2 text-primary" onclick="editItem(${i})"></i>
+          <i class="fa-regular fa-trash-can fs-6 text-danger" onclick="deleteItem(${i})"></i>
         </td>
       </tr>
     `;
@@ -92,8 +90,11 @@ function showModal(index) {
 }
 
 function deleteItem(index) {
-  userArray.splice(index, 1);
-  displayToDo();
+  if(confirm("Are you sure you want to delete this?")){
+    userArray.splice(index, 1);
+    localStorage.setItem("tasks", JSON.stringify(userArray));
+    displayToDo();
+  }
 }
 
 function editItem(index) {
@@ -109,7 +110,8 @@ function editItem(index) {
 }
 
 function saveItem() {
-  let currentTime = new Date();
+  if(confirm("Are you sure you want to save this?")){
+    let currentTime = new Date();
   let formattedTime = formatDateTime(currentTime);
 
   let newTitle = document.getElementById("title").value;
@@ -126,4 +128,9 @@ function saveItem() {
 
   displayToDo();
   editIndex = -1;
+  localStorage.setItem("tasks", JSON.stringify(userArray));
+
+  document.getElementById("title").value = "";
+  document.getElementById("textarea").value = "";
+  }
 }
