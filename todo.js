@@ -19,19 +19,21 @@ function addToList() {
     timestamp: formattedTime,
     completed: false
   };
-   if(title.trim() === "" || textarea.trim() === ""){
+   if(title.trim() === "" && textarea.trim() === ""){
     alert("Please enter a title or description ")
     return;
    }
 
 
-  document.getElementById("title").value = "";
-  document.getElementById("textarea").value = "";
-      userArray.push(toDoObject);
-      console.log(userArray)
-    localStorage.setItem("tasks", JSON.stringify(userArray));
-    displayToDo();
-    }
+   userArray.push(toDoObject);
+   console.log(userArray)
+   localStorage.setItem("tasks", JSON.stringify(userArray));
+   displayToDo();
+
+
+   document.getElementById("title").value = "";
+   document.getElementById("textarea").value = "";
+  }
 
 
 
