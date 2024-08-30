@@ -1,9 +1,5 @@
 
-let localTasks = localStorage.getItem("tasks");
-let objectFromLocal = JSON.parse(localTasks);
- console.log(objectFromLocal)
-
-let userArray = objectFromLocal;
+let userArray = [];
 let editIndex = -1;
 
 function addToList() {
@@ -26,8 +22,6 @@ function addToList() {
 
 
    userArray.push(toDoObject);
-   console.log(userArray)
-   localStorage.setItem("tasks", JSON.stringify(userArray));
    displayToDo();
 
 
@@ -68,7 +62,7 @@ function displayToDo() {
       <tr class="text-center tablerow ${userArray[i].completed ? 'completed' : ''}">
         <td><input class="form-check-input" type="checkbox" ${checked} onclick="toggleCompletion(${i})"></td>
         <td>${userArray[i].title}</td>
-        <td><i class="fa-solid fa-eye fs-6 text-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="showModal(${i})"></i></td>
+        <td><i class="fa-solid fa-eye fs-6 text-primary" style="display:block" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="showModal(${i})"></i></td>
         <td>${userArray[i].timestamp}</td>
         <td>
           <i class="fa-solid fa-file-pen fs-6 me-2 text-primary" onclick="editItem(${i})"></i>
@@ -92,9 +86,8 @@ function showModal(index) {
 }
 
 function deleteItem(index) {
-  if(confirm("Are you sure you want to delete this?")){
+  if(confirm("By deleting this you won't be able to recover it")){
     userArray.splice(index, 1);
-    localStorage.setItem("tasks", JSON.stringify(userArray));
     displayToDo();
   }
 }
@@ -130,7 +123,6 @@ function saveItem() {
 
   displayToDo();
   editIndex = -1;
-  localStorage.setItem("tasks", JSON.stringify(userArray));
 
   document.getElementById("title").value = "";
   document.getElementById("textarea").value = "";
